@@ -26,14 +26,8 @@ namespace NunitSeleniumTest
         {
             bool isSliderCarouselDisplayed = driver.FindElement(By.CssSelector("#slider-carousel")).Displayed;
 
-            if (isSliderCarouselDisplayed)
-            {
-                Console.WriteLine("Home page verification is successful.");
-            }
-            else
-            {
-                throw new Exception("Homepage does not load properly");
-            }
+            // Assert that the slider carousel is displayed.
+            Assert.IsTrue(isSliderCarouselDisplayed, "Homepage does not load properly");
         }
 
 
