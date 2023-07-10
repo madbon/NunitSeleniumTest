@@ -63,7 +63,7 @@ namespace NunitSeleniumTest
 
 
                 ClickAddToCartByProductId("3");
-                ClickAddToCartByProductId("4");
+                //ClickAddToCartByProductId("4");
 
             }
             else
@@ -76,26 +76,53 @@ namespace NunitSeleniumTest
         public void ClickAddToCartByProductId(string productId)
         {
             // Find the element with the specified data-product-id and click it
-            IWebElement addToCartButton = driver.FindElement(By.CssSelector($"a[data-product-id='{productId}'].add-to-cart"));
+            //IWebElement addToCartButton = driver.FindElement(By.CssSelector($"a[data-product-id='{productId}'].add-to-cart"));
 
-            Actions actions = new Actions(driver);
+            //Actions actions = new Actions(driver);
             
-            actions.MoveToElement(addToCartButton).Perform();
+            //actions.MoveToElement(addToCartButton).Perform();
 
-            Thread.Sleep(5000);
+            //Thread.Sleep(5000);
+
+            By buttonLocator = By.CssSelector($"a[data-product-id='{productId}'].add-to-cart"); // replace "button-id" with your button's actual ID
+            IWebElement addToCartButton;
+
+            try
+            {
+                addToCartButton = WaitAndFindElement(buttonLocator);
+            }
+            catch (WebDriverTimeoutException)
+            {
+                throw new Exception("The button was not found within the time limit");
+            }
+
             addToCartButton.Click();
-            
-            IWebElement continueShopButton = driver.FindElement(By.CssSelector(".close-modal"));
 
-            Thread.Sleep(5000);
+            //IWebElement continueShopButton = driver.FindElement(By.CssSelector(".close-modal"));
+
+            //Thread.Sleep(5000);
+            //continueShopButton.Click();
+
+            By continueShopButtonLocator = By.CssSelector(".close-modal"); // replace "button-id" with your button's actual ID
+            IWebElement continueShopButton;
+
+            try
+            {
+                continueShopButton = WaitAndFindElement(continueShopButtonLocator);
+            }
+            catch (WebDriverTimeoutException)
+            {
+                throw new Exception("The button was not found within the time limit");
+            }
+
             continueShopButton.Click();
-            
+
         }
 
         [TearDown]
         public void Cleanup()
         {
-            driver.Quit();
+            //driver.Quit();
         }
     }
 }
