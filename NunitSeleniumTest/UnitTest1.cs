@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
+using System.Linq;
 using System;
 
 namespace NunitSeleniumTest
@@ -10,117 +11,77 @@ namespace NunitSeleniumTest
     public class Tests
     {
         private IWebDriver driver;
-        [SetUp]
-        public void Setup()
+        WebDriverWait wait;
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
         {
             driver = new ChromeDriver();
             driver.Navigate().GoToUrl("http://automationexercise.com");
-        }
-
-        public IWebElement WaitAndFindElement(By locator)
-        {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            return wait.Until(condition: driver =>
-            {
-                IWebElement element = driver.FindElement(locator);
-                if (element != null && element.Enabled && element.Displayed)
-                    return element;
-                return null;
-            });
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
         }
 
 
-        [Test]
+        [Test, Order(1)]
         public void VerifyHomePage()
         {
             bool isSliderCarouselDisplayed = driver.FindElement(By.CssSelector("#slider-carousel")).Displayed;
 
             if (isSliderCarouselDisplayed)
             {
-                Assert.Pass("Home page verification is successful.");
+                Console.WriteLine("Home page verification is successful.");
             }
             else
             {
-                Assert.Fail();
+                throw new Exception("Homepage does not load properly");
             }
         }
 
 
-        [Test]
-        public void GoToProductPage()
+        [Test, Order(2)]
+        public void AddToCart()
         {
-            driver.Navigate().GoToUrl("https://www.automationexercise.com/products");
+            Thread.Sleep(3000); // to have time to manually to close ads
+            IWebElement productMenu = wait.Until(e => e.FindElement(By.CssSelector(".shop-menu ul.nav li:nth-child(2) a")));
+            productMenu.Click();
 
-            bool isSearchProductDisplyayed = driver.FindElement(By.CssSelector("#search_product")).Displayed;
+            Thread.Sleep(3000); //  to have time to manually to close ads
+            IWebElement searchProduct = wait.Until(e => e.FindElement(By.CssSelector("#search_product")));
+            searchProduct.SendKeys("dress");
 
-            if (isSearchProductDisplyayed)
-            {
-                IWebElement searchInput = driver.FindElement(By.CssSelector("#search_product"));
-                searchInput.SendKeys("dress");
+            Thread.Sleep(3000); //  to have time to manually to close ads
+            IWebElement submitSearch = wait.Until(e => e.FindElement(By.CssSelector("#submit_search")));
+            submitSearch.Click();
 
-                IWebElement submitButton = driver.FindElement(By.CssSelector("#submit_search"));
-                submitButton.Click();
+            ClickAddToCartByProductId("3");
 
+            ClickAddToCartByProductId("4");
 
-                ClickAddToCartByProductId("3");
-                //ClickAddToCartByProductId("4");
+            ClickAddToCartByProductId("16");
 
-            }
-            else
-            {
-                Assert.Fail();
-            }
+            ClickAddToCartByProductId("19");
+
         }
-            
+
 
         public void ClickAddToCartByProductId(string productId)
         {
-            // Find the element with the specified data-product-id and click it
-            //IWebElement addToCartButton = driver.FindElement(By.CssSelector($"a[data-product-id='{productId}'].add-to-cart"));
 
-            //Actions actions = new Actions(driver);
-            
-            //actions.MoveToElement(addToCartButton).Perform();
-
-            //Thread.Sleep(5000);
-
-            By buttonLocator = By.CssSelector($"a[data-product-id='{productId}'].add-to-cart"); // replace "button-id" with your button's actual ID
-            IWebElement addToCartButton;
-
-            try
-            {
-                addToCartButton = WaitAndFindElement(buttonLocator);
-            }
-            catch (WebDriverTimeoutException)
-            {
-                throw new Exception("The button was not found within the time limit");
-            }
-
-            addToCartButton.Click();
-
-            //IWebElement continueShopButton = driver.FindElement(By.CssSelector(".close-modal"));
-
-            //Thread.Sleep(5000);
-            //continueShopButton.Click();
-
-            By continueShopButtonLocator = By.CssSelector(".close-modal"); // replace "button-id" with your button's actual ID
-            IWebElement continueShopButton;
-
-            try
-            {
-                continueShopButton = WaitAndFindElement(continueShopButtonLocator);
-            }
-            catch (WebDriverTimeoutException)
-            {
-                throw new Exception("The button was not found within the time limit");
-            }
-
-            continueShopButton.Click();
+            Thread.Sleep(3000);
+            IWebElement addToCartItem = wait.Until(e => e.FindElement(By.CssSelector($"a[data-product-id='{productId}'].add-to-cart")));
+            addToCartItem.Click();
+            Thread.Sleep(3000);
+            IWebElement closeButton = wait.Until(e => e.FindElement(By.CssSelector("#cartModal .modal-dialog.modal-confirm .modal-content .modal-footer button.close-modal")));
+            Thread.Sleep(3000);
+            closeButton.Click();
 
         }
 
-        [TearDown]
-        public void Cleanup()
+
+
+
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
         {
             //driver.Quit();
         }
