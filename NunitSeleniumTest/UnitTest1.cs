@@ -102,7 +102,7 @@ namespace NunitSeleniumTest
 
             Thread.Sleep(3000);
             IWebElement quantityInput = wait.Until(e => e.FindElement(By.CssSelector("#quantity")));
-            quantityInput.SendKeys("");
+            quantityInput.Clear();
             Thread.Sleep(1000);
             quantityInput.SendKeys("2");
 
@@ -329,7 +329,7 @@ namespace NunitSeleniumTest
 
         }
 
-        [Test, Order(9)]
+        [Test, Order(10)]
         public void Payment()
         {
             IWebElement nameOnCard = wait.Until(e => e.FindElement(By.Name("name_on_card")));
