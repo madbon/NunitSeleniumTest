@@ -47,7 +47,7 @@ namespace NunitSeleniumTest
 
 
         [Test]
-        public void VerifyProductPage()
+        public void GoToProductPage()
         {
             driver.Navigate().GoToUrl("https://www.automationexercise.com/products");
 
@@ -64,12 +64,6 @@ namespace NunitSeleniumTest
 
                 ClickAddToCartByProductId("3");
                 ClickAddToCartByProductId("4");
-                Thread.Sleep(9000);
-
-                IWebElement hmLink = driver.FindElement(By.CssSelector(".brands-name a[href*='H&M']"));
-                hmLink.Click();
-
-
 
             }
             else
@@ -88,19 +82,15 @@ namespace NunitSeleniumTest
             
             actions.MoveToElement(addToCartButton).Perform();
 
-            Thread.Sleep(9000);
+            Thread.Sleep(5000);
             addToCartButton.Click();
-
             
             IWebElement continueShopButton = driver.FindElement(By.CssSelector(".close-modal"));
 
-            Thread.Sleep(9000);
+            Thread.Sleep(5000);
             continueShopButton.Click();
             
         }
-
-
-
 
         [TearDown]
         public void Cleanup()
