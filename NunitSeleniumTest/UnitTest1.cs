@@ -70,7 +70,17 @@ namespace NunitSeleniumTest
 
         }
 
+        [Test, Order(3)]
+        public void VerifyCartDisplayed()
+        {
+            Thread.Sleep(3000); // to have time to manually to close ads
+            IWebElement cartMenu = wait.Until(e => e.FindElement(By.CssSelector(".shop-menu ul.nav li:nth-child(3) a")));
+            cartMenu.Click();
 
+            bool cartInfoTable = driver.FindElement(By.CssSelector("#cart_info_table")).Displayed;
+
+            Assert.IsTrue(cartInfoTable, "Cart does not load properly");
+        }
 
 
 
