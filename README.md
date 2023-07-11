@@ -15,7 +15,7 @@ Project Type
 
 Packages Used
 - Selenium.WebDriver
-- NUnit Testing Framework
+- NUnit
 
 How to use
 1.  Open Visual Studio and Click Clone a repository
