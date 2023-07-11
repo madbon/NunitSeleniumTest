@@ -8,7 +8,7 @@ using System;
 
 namespace NunitSeleniumTest
 {
-    public class Tests
+    public class TestCase14
     {
         private IWebDriver driver;
         WebDriverWait wait;
@@ -273,8 +273,8 @@ namespace NunitSeleniumTest
             createAccount.Click();
 
             Thread.Sleep(3000);
-            bool accountCreated = driver.PageSource.Contains("ACCOUNT CREATED!");
-            Assert.IsTrue(accountCreated, "Expected 'ACCOUNT CREATED!' but was not found on the page");
+            bool accountCreated = driver.PageSource.Contains("Account Created!");
+            Assert.IsTrue(accountCreated, "Expected 'Account Created!' but was not found on the page");
 
             Thread.Sleep(3000);
             IWebElement continueButton = wait.Until(e => e.FindElement(By.CssSelector("[data-qa='continue-button']")));
