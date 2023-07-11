@@ -138,7 +138,7 @@ namespace NunitSeleniumTest
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            //driver.Quit();
+            driver.Quit();
         }
 
     }
